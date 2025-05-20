@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         VENV = 'venv'
+        MY_CRED = credentials('docker_credentials')
     }
 
     stages {
@@ -34,13 +35,17 @@ pipeline {
             steps {
                 script {
                     echo "Building and pushing Docker image"
+                    withCredentials([usernamePassword(credentialsId: 'my-credentials-id', 
+                                                  usernameVariable: 'USERNAME', 
+                                                  passwordVariable: 'PASSWORD')]){
 
-                    sh '''
-                        docker login -u midhileshp -p Y@mini!23
-                        docker build -t dock .
-                        docker tag dock midhileshp/jenkins-docker
-                        docker push midhileshp/jenkins-docker
-                    '''
+                        sh '''
+                            docker login -u $USERNAME -p $PASSWORD
+                            docker build -t dock .
+                            docker tag dock midhileshp/jenkins-docker
+                            docker push midhileshp/jenkins-docker
+                        '''
+                        }
                     }
                 }
             }

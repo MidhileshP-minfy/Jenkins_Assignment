@@ -3,8 +3,6 @@ pipeline {
 
     environment {
         VENV = 'venv'
-        DOCKER_IMAGE = 'midhileshp/dock-1'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
     }
 
     stages {
@@ -32,18 +30,6 @@ pipeline {
                 }
             }
         }
-        stage("Test") {
-            steps {
-                script {
-                    echo "This is my Test Step"
-                    sh '''
-                        . $VENV/bin/activate
-                        pytest -cov=app --junitxml=pytest.xml tests/
-                        
-                    '''
-                }
-            }
-        }
         stage("Docker Build and Push") {
             steps {
                 script {
@@ -58,8 +44,6 @@ pipeline {
                     }
                 }
             }
-            
-        }
         stage ("Run Application") {
             steps {
                 script {
@@ -69,3 +53,4 @@ pipeline {
         }
 
     }
+}

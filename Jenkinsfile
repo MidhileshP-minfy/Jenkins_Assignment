@@ -27,7 +27,7 @@ pipeline {
         stage ("Install Packages") {
             steps {
                 script {
-                    echo "This is Install PAkcges Step"
+                    echo "This is Install Pakcges Step"
                 }
             }
         }
@@ -37,10 +37,10 @@ pipeline {
                     echo "Building and pushing Docker image"
                     withCredentials([usernamePassword(credentialsId: 'docker_credentials', 
                                                   usernameVariable: 'USERNAME', 
-                                                  passwordVariable: 'PASSWORD')]){
+                                                  passwordVariable: 'PASSWORD'-stdin)]){
 
                         sh '''
-                            docker login -u $USERNAME -p $PASSWORD-stdin
+                            docker login -u $USERNAME -p $PASSWORD
                             docker build -t dock .
                             docker tag dock midhileshp/jenkins-docker
                             docker push midhileshp/jenkins-docker

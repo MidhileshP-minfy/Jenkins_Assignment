@@ -37,10 +37,10 @@ pipeline {
                     echo "Building and pushing Docker image"
                     withCredentials([usernamePassword(credentialsId: 'docker_credentials', 
                                                   usernameVariable: 'USERNAME', 
-                                                  passwordVariable: 'PASSWORD'-stdin)]){
+                                                  passwordVariable: 'PASSWORD')]){
 
                         sh '''
-                            docker login -u $USERNAME -p $PASSWORD-stdin
+                            docker login -u $USERNAME --password-stdin $PASSWORD
                             docker build -t dock .
                             docker tag dock midhileshp/jenkins-docker
                             docker push midhileshp/jenkins-docker

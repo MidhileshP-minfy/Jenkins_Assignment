@@ -40,7 +40,7 @@ pipeline {
                                                   passwordVariable: 'PASSWORD')]){
 
                         sh '''
-                            echo "$PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                            echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
                             docker build -t dock .
                             docker tag dock midhileshp/jenkins-docker
                             docker push midhileshp/jenkins-docker

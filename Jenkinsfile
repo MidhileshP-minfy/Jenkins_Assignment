@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     echo "Building and pushing Docker image"
-                    withCredentials([usernamePassword(credentialsId: 'my-credentials-id', 
+                    withCredentials([usernamePassword(credentialsId: 'docker_credentials', 
                                                   usernameVariable: 'USERNAME', 
                                                   passwordVariable: 'PASSWORD')]){
 

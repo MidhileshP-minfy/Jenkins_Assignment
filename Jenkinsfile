@@ -3,8 +3,7 @@ pipeline {
 
     environment {
         VENV = 'venv'
-        DOCKER_IMAGE = 'midhileshp/dock-1'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        MY_CRED = credentials('docker_credentials')
     }
 
     stages {
@@ -28,19 +27,7 @@ pipeline {
         stage ("Install Packages") {
             steps {
                 script {
-                    echo "This is Install PAkcges Step"
-                }
-            }
-        }
-        stage("Test") {
-            steps {
-                script {
-                    echo "This is my Test Step"
-                    sh '''
-                        . $VENV/bin/activate
-                        pytest -cov=app --junitxml=pytest.xml tests/
-                        
-                    '''
+                    echo "This is Install Pakcges Step"
                 }
             }
         }
@@ -48,18 +35,20 @@ pipeline {
             steps {
                 script {
                     echo "Building and pushing Docker image"
+                    withCredentials([usernamePassword(credentialsId: 'docker_credentials', 
+                                                  usernameVariable: 'USERNAME', 
+                                                  passwordVariable: 'PASSWORD')]){
 
-                    sh '''
-                        docker login -u midhileshp -p Y@mini!23
-                        docker build -t dock .
-                        docker tag dock midhileshp/jenkins-docker
-                        docker push midhileshp/jenkins-docker
-                    '''
+                        sh '''
+                            echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+                            docker build -t dock .
+                            docker tag dock midhileshp/jenkins-docker
+                            docker push midhileshp/jenkins-docker
+                        '''
+                        }
                     }
                 }
             }
-            
-        }
         stage ("Run Application") {
             steps {
                 script {
